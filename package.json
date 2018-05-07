@@ -1,0 +1,24 @@
+{
+  "name": "quick-force",
+  "version": "0.0.1",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "engines": {
+    "node": "5.3.x"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-util": "^3.0.8",
+    "gulp-atom-downloader": "^0.2.1",
+    "gulp-nodemon": "^2.2.1",
+    "gulp-livereload": "^3.8.1",
+    "gulp-env": "^0.4.0"
+  },
+  "dependencies": {
+    "express": "~4.16.3",
+    "body-parser": "^1.18.2",
+    "hbs": "~4.0.1",
+    "nforce": "~1.10.0"
+  }
+}

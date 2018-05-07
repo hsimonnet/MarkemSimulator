@@ -1,0 +1,353 @@
+<html lang="en">
+
+<head>
+  <link href="jquery-ui.css" rel="stylesheet">
+  <link href="app.css" rel="stylesheet" type="text/css" />
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="jquery-ui.js"></script>
+  <script>
+    $(function () {
+      //disabled slider
+      $("#slider-4").slider({
+        orientation: "vertical"
+      });
+      $("#slider-4").slider('disable');
+
+      //Temp FL, FR, RL, RR
+      $("#slider-FL").slider({
+        orientation: "horizontal",
+        value: 50,
+        min: 0, // min value
+        max: 100, // max value
+        slide: function (event, ui) {
+          $("#val-FL").val(ui.value);
+        }
+      });
+      $("#val-FL").val($("#slider-FL").slider("value"));
+
+      $("#slider-FR").slider({
+        orientation: "horizontal",
+        value: 35,
+        min: 0, // min value
+        max: 100, // max value
+        slide: function (event, ui) {
+          $("#val-FR").val(ui.value);
+        }
+      });
+      $("#val-FR").val($("#slider-FR").slider("value"));
+
+      $("#slider-RL").slider({
+        orientation: "horizontal",
+        value: 88,
+        min: 0, // min value
+        max: 100, // max value
+        slide: function (event, ui) {
+          $("#val-RL").val(ui.value);
+        }
+      });
+      $("#val-RL").val($("#slider-RL").slider("value"));
+
+      $("#slider-RR").slider({
+        orientation: "horizontal",
+        value: 88,
+        min: 0, // min value
+        max: 100, // max value
+        slide: function (event, ui) {
+          $("#val-RR").val(ui.value);
+        }
+      });
+      $("#val-RR").val($("#slider-RR").slider("value"));
+
+      //PRESSURE PFL, PFR, PRL, PRR
+      $("#slider-PFL").slider({
+        orientation: "horizontal",
+        value: 36,
+        min: 0, // min value
+        max: 80, // max value
+        slide: function (event, ui) {
+          $("#val-PFL").val(ui.value);
+        }
+      });
+      $("#val-PFL").val($("#slider-PFL").slider("value"));
+
+      $("#slider-PFR").slider({
+        orientation: "horizontal",
+        value: 35,
+        min: 0, // min value
+        max: 80, // max value
+        slide: function (event, ui) {
+          $("#val-PFR").val(ui.value);
+        }
+      });
+      $("#val-PFR").val($("#slider-PFR").slider("value"));
+
+      $("#slider-PRL").slider({
+        orientation: "horizontal",
+        value: 34,
+        min: 0, // min value
+        max: 80, // max value
+        slide: function (event, ui) {
+          $("#val-PRL").val(ui.value);
+        }
+      });
+      $("#val-PRL").val($("#slider-PRL").slider("value"));
+
+      $("#slider-PRR").slider({
+        orientation: "horizontal",
+        value: 36,
+        min: 0, // min value
+        max: 80, // max value
+        slide: function (event, ui) {
+          $("#val-PRR").val(ui.value);
+        }
+      });
+      $("#val-PRR").val($("#slider-PRR").slider("value"));
+
+
+      //WEAR (R) RFL, RFR, RRL, RRR
+      $("#slider-RFL").slider({
+        orientation: "horizontal",
+        value: 50,
+        min: 0, // min value
+        max: 100, // max value
+        slide: function (event, ui) {
+          $("#val-RFL").val(ui.value);
+        }
+      });
+      $("#val-RFL").val($("#slider-RFL").slider("value"));
+
+      $("#slider-RFR").slider({
+        orientation: "horizontal",
+        value: 35,
+        min: 0, // min value
+        max: 100, // max value
+        slide: function (event, ui) {
+          $("#val-RFR").val(ui.value);
+        }
+      });
+      $("#val-RFR").val($("#slider-RFR").slider("value"));
+
+      $("#slider-RRL").slider({
+        orientation: "horizontal",
+        value: 88,
+        min: 0, // min value
+        max: 100, // max value
+        slide: function (event, ui) {
+          $("#val-RRL").val(ui.value);
+        }
+      });
+      $("#val-RRL").val($("#slider-RRL").slider("value"));
+
+      $("#slider-RRR").slider({
+        orientation: "horizontal",
+        value: 88,
+        min: 0, // min value
+        max: 100, // max value
+        slide: function (event, ui) {
+          $("#val-RRR").val(ui.value);
+        }
+      });
+      $("#val-RRR").val($("#slider-RRR").slider("value"));
+
+
+
+
+      //submitbutton
+      $("#button-2").button();
+      // init accordeon
+      $("#accordion").accordion();
+
+      // init dialogbox
+      $('#dialogMsg').dialog(
+        {
+          autoOpen: false,
+          buttons: { OK: function () { $(this).dialog("close"); } },
+          title: "Simulator to IOT Explorer"
+        });
+      $('#dialogMsgError').dialog(
+        {
+          autoOpen: false,
+          buttons: { OK: function () { $(this).dialog("close"); } },
+          title: "Error sending event to IOT Explorer"
+        });
+    });
+
+    //Sending events
+    function pushevent() {
+      //$( "#button-2" ).click(function(){
+      console.log('Identification: ' + $('#val-mmsi').val() + ' - ' + $('#val-name').val());
+
+      //create a javascript object with the event field values
+      var eventInfo = {
+        "SERIAL_NUMBER__c": $('#val-mmsi').val(),
+        "FAULT_ID__c": $('#val-FAULT').val()
+      }
+
+      /*
+      {"DeviceID__c": "6442819",
+      "key__c": "trasmediterranea",
+      "temperature__c": $('#val-swelldir16').val(),
+      "humidity__c": $('#val-swelldir16').val(),
+      "ts__c": "trasmediterranea",
+      "door__c": "trasmediterranea"
+    };
+    */
+      console.log('eventInfo = ' + eventInfo);
+      //convert the object to a JSON string (serialize json)
+      var eventInfoJson = JSON.stringify(eventInfo);
+      console.log(eventInfoJson);
+
+      $.ajax({
+        type: 'POST',
+        data: eventInfoJson,
+        contentType: 'application/json',
+        url: '/simulation',
+        success: function (data) {
+          console.log('success');
+          $('#dialogMsg').dialog("open");
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+          $('#dialogMsgError').dialog("open");
+        }
+      });
+    };
+  </script>
+</head>
+
+<body>
+  <div id="dialogMsg" title="IOT simulator">Events sent to Salesforce IOT</div>
+  <div id="dialogMsgError" title="ERROR IOT simulator">Error ... </div>
+
+  <div className="App-body">
+
+
+    <div class="video-background">
+      <div class="video-foreground">
+        <iframe src="https://www.youtube.com/embed/7X3L1ojNM2s?controls=0&showinfo=0&rel=0&autoplay=1&mute=1&loop=1&playlist=7X3L1ojNM2s" frameborder="0" allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <div id="vidtop-content">
+      <div class="vid-info">
+        <form id="formsimulator" runat="server">
+          <div id="accordion">
+            <h3>Identification</h3>
+            <div>
+              <table border="0" width="100%">
+                <tr>
+                  <td>
+                    <ul>
+                      <li>
+                        <label for="val-mmsi">Printer id : </label>
+                        <input type="text" id="val-mmsi" value="AC10430024" style="border:0; color:#b9cd6d; font-weight:bold;" />
+                      </li>
+                      <li>
+                        <label for="val-name">Additive type : </label>
+                        <input type="text" id="val-name" value="XCC-2200" style="border:0; color:#b9cd6d; font-weight:bold;" />
+                      </li>
+                      <li>
+                        <label for="val-km">FPGA HEAD VERSION : </label>
+                        <input type="text" id="val-KM" value="52340" style="border:0; color:#b9cd6d; font-weight:bold;" />
+                      </li>
+                      <li>
+                        <label for="val-name">FPGA PRINTER VERSION : </label>
+                        <input type="text" id="val-name" value="MarkemImage" style="border:0; color:#b9cd6d; font-weight:bold;" />
+                      </li>
+                      <li>
+                        <label for="val-name">Model : </label>
+                        <input type="text" id="val-name" value="MarkemImaje 2200" style="border:0; color:#b9cd6d; font-weight:bold;" />
+                      </li>
+                      <li>
+                        <label for="val-FAULT">FAULT ID : </label>
+                        <input type="text" id="val-FAULT" value="123" style="border:0; color:#b9cd6d; font-weight:bold;" />
+                      </li>
+                    </ul>
+                  </td>
+                  <td>
+                    <center>
+                      <img src="images/2200_printer.png" height="125" alt="My printer ..." />
+                    </center>
+                  </td>
+                </tr>
+              </table>
+              <br/><br/><br/>
+            </div>
+
+            <h3>Hardware information</h3>
+            <div>
+              <center>
+                <img src="images/tp.png" />
+              </center>
+              <table border="0" width="100%">
+                <tr>
+                  <td>
+                    <label for="val-FL">Head temperature: </label>
+                    <input type="text" id="val-FL" style="border:0; color:#b9cd6d; font-weight:bold;" />
+                    <div id="slider-FL"></div>
+                    <br/>
+                    <label for="val-LR">Hardware temperature : </label>
+                    <input type="text" id="val-RL" style="border:0; color:#b9cd6d; font-weight:bold;" />
+                    <div id="slider-RL"></div>
+                  </td>
+                  <td>
+                    <center>
+                      <img src="images/markem-imaje-2200.jpg" />
+                    </center>
+                  </td>
+                  <td>
+                    <label for="val-FR">Jet speed : </label>
+                    <input type="text" id="val-FR" style="border:0; color:#b9cd6d; font-weight:bold;" />
+                    <div id="slider-FR"></div>
+                    <br/>
+                    <label for="val-RR">Motor speed : </label>
+                    <input type="text" id="val-RR" style="border:0; color:#b9cd6d; font-weight:bold;" />
+                    <div id="slider-RR"></div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+
+            <h3>Ink information</h3>
+            <div>
+              <center>
+                <img src="images/tp.png" />
+              </center>
+              <table border="0" width="100%">
+                <tr>
+                  <td>
+                    <label for="val-PFL">Solvent level : </label>
+                    <input type="text" id="val-PFL" style="border:0; color:#b9cd6d; font-weight:bold;" />
+                    <div id="slider-PFL"></div>
+                    <br/>
+                    <label for="val-PLR">Viscosity target : </label>
+                    <input type="text" id="val-PRL" style="border:0; color:#b9cd6d; font-weight:bold;" />
+                    <div id="slider-PRL"></div>
+                  </td>
+                  <td>
+                    <center>
+                      <img src="images/markem-imaje-2200.jpg" />
+                    </center>
+                  </td>
+                  <td>
+                    <label for="val-PFR">IP level : </label>
+                    <input type="text" id="val-PFR" style="border:0; color:#b9cd6d; font-weight:bold;" />
+                    <div id="slider-PFR"></div>
+                    <br/>
+                    <label for="val-PRR">Ink Type : </label>
+                    <input type="text" id="val-PRR" style="border:0; color:#b9cd6d; font-weight:bold;" />
+                    <div id="slider-PRR"></div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </form>
+        <center>
+          <input id="button-2" onclick="pushevent()" type="submit" value="Send Events">
+        </center>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
